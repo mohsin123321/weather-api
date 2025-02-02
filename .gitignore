@@ -1,0 +1,5 @@
+# ignore .env file
+.env
+
+# Default ignored files
+.vscode/
