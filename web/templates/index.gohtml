@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="form-container">
+        <form id="weather-form">
+           <div class="input-container">
+                <input type="text" id="city-input" placeholder="Enter city name..." />
+                <button type="submit">Get Weather</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="weather-result" class="weather-card" style="display: none;">
+        <h1 id="city-name"></h2>
+        <p class="small-text" id="coordinates"></p>
+        <h2 id="weather-condition"></h3>
+        <p class="temp" id="temperature"></p>
+        <p class="details"><i class="fa-solid fa-temperature-three-quarters"></i> Temperature: <span id="temperature-range"></span></p>
+        <p class="details"><i class="fa-solid fa-wind"></i> Wind: <span id="wind"></span></p>
+        <p class="details"><i class="fa-solid fa-cloud"></i> Clouds: <span id="clouds"></span></p>
+        <p class="details"><i class="fa-solid fa-eye"></i> Visibility: <span id="visibility"></span></p>
+        <p class="details"><i class="fa-solid fa-gauge-high"></i> Pressure: <span id="pressure"></span>hPa</p>
+        <p class="details"><i class="fa-solid fa-droplet"></i> Humidity: <span id="humidity"></span>%</p>
+        <p class="details" id="rain" style="display: none;"><i class="fa-solid fa-cloud-showers-heavy"></i> Rain (Last Hour): <span id="rain-value"></span> mm</p>
+        <p class="details" id="snow" style="display: none;"><i class="fa-solid fa-snowflake"></i> Snow (Last Hour): <span id="snow-value"></span> mm</p>
+        <p class="details"><i class="fa-solid fa-sun"></i> Sunrise: <span id="sunrise-time"></span></p>
+        <p class="details"><i class="fa-solid fa-moon"></i> Sunset: <span id="sunset-time"></span></p>
+    </div>
+
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
