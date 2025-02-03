@@ -85,14 +85,12 @@ func (s *Server) GracefulShutDown(done chan bool) {
 func (s *Server) HomePage(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("web/templates/index.gohtml")
 	if err != nil {
-		log.Println(err)
 		WriteErrorResponse(w, apperrors.ErrServerError())
 		return
 	}
 
 	err = tmpl.Execute(w, nil)
 	if err != nil {
-		log.Println(err)
 		WriteErrorResponse(w, apperrors.ErrServerError())
 		return
 	}
