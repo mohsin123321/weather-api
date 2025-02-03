@@ -38,9 +38,11 @@ func ReadConfig() {
 
 // loadConfig loads the application configuration from the environment
 func loadConfig() {
+	// load the environment variables from .env file
+	// Note: the environment variables take precedence over the .env file
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Println("Error loading .env file, using default values or system environment variables")
 	}
 
 	// initialize the configuration with env/default values
