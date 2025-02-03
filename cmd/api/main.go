@@ -15,8 +15,12 @@ func main() {
 	config.ReadConfig()
 
 	cfg := config.GetConfig()
+	cache := persistence.NewCache()
 
-	server := server.NewServer(cfg.Port, persistence.NewCache(), adapters.NewOpenWeatherMapAdapter())
+	// start the cache cleanup routine in the background
+	go cache.CleanUp()
+
+	server := server.NewServer(cfg.Port, cache, adapters.NewOpenWeatherMapAdapter())
 
 	// create a buffered channel used to notify the main goroutine that the shutdown is complete
 	done := make(chan bool, 1)

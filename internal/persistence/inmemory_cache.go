@@ -10,6 +10,7 @@ import (
 
 // CacheMap is an in-memory cache for storing weather data
 type CacheMap struct {
+	// data uses sync.Map instead of regular map for thread-safe concurrent access.
 	data sync.Map
 }
 
@@ -54,4 +55,25 @@ func (c *CacheMap) Set(city string, weather dto.OpenWeatherMapResponse) {
 		weather:   weather,
 		expiresAt: time.Now().Add(time.Duration(cacheExpiry) * time.Minute),
 	})
+}
+
+// CleanUp periodically removes expired entries from the cache after every minute
+func (c *CacheMap) CleanUp() {
+	ticker := time.NewTicker(1 * time.Minute)
+	defer ticker.Stop()
+
+	for range ticker.C {
+		c.data.Range(func(key, value interface{}) bool {
+			entry, ok := value.(cacheEntry)
+			if !ok {
+				return true
+			}
+
+			if time.Now().After(entry.expiresAt) {
+				c.data.Delete(key)
+			}
+
+			return true
+		})
+	}
 }
