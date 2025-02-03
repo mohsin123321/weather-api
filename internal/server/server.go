@@ -43,6 +43,8 @@ func NewServer(port string, cacheMap domain.CacheMap, OpenWeatherMapAdapter doma
 // RegisterRoutes registers all HandlerFuncs for the existing HTTP routes.
 func (s *Server) RegisterRoutes() http.Handler {
 	router := chi.NewRouter()
+	applyCommonMiddlewares(router)
+
 	router.Get("/", http.HandlerFunc(s.HomePage))
 	// Serve static assets
 	router.Mount("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("web/assets"))))
@@ -67,7 +69,6 @@ func (s *Server) GracefulShutDown(done chan bool) {
 	<-ctx.Done()
 
 	log.Println("Shutting down server...")
-
 	// The context is used to inform the server it has 5 seconds to finish
 	// the request it is currently handling
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
