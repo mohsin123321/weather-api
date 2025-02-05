@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strings"
 	"weather-api/internal/apperrors"
+	"weather-api/internal/config"
 )
 
 // GetWeatherDetails fetches weather data for a given city.
@@ -30,6 +31,9 @@ func (s *Server) GetWeatherDetails(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// otherwise, delete the cache entry
+	s.CacheMap.Delete(city)
+
 	// Otherwise, fetch the weather from the API
 	weather, err = s.OpenWeatherMapAdapter.GetWeather(city)
 	if err != nil {
@@ -38,7 +42,7 @@ func (s *Server) GetWeatherDetails(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Cache the weather for future requests
-	s.CacheMap.Set(city, weather)
+	s.CacheMap.Set(city, weather, config.GetConfig().CacheExpiry)
 
 	// Return the weather
 	WriteAPIDataResponse(w, http.StatusOK, weather)
