@@ -3,3 +3,6 @@
 
 # Default ignored files
 .vscode/
+
+# Ignore mocks
+mocks
