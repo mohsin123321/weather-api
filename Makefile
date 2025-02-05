@@ -8,6 +8,8 @@ help:
 	$(printf) "build" "build the app in an executable file"
 	$(printf) "semgrep" "run semgrep to check for vulnerabilities"
 	$(printf) "lint" "run the linter golangci-lint"
+	$(printf) "prepare_test" "prepare mocks for the tests"
+	$(printf) "test" "prepare tests and run the tests"
 
 	@echo -e "\n'run' will be executed by default if you do not specify a command."
 
@@ -22,3 +24,10 @@ semgrep:
 
 lint:
 	golangci-lint run -v --timeout 5m
+
+prepare_test: 
+	go generate tests/mocks_generator.go
+
+test:
+	prepare_test
+	go test -v ./...
