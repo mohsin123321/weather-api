@@ -8,9 +8,14 @@ import (
 	"weather-api/internal/persistence"
 	"weather-api/internal/server"
 
+	_ "weather-api/docs"
 	"weather-api/internal/config"
 )
 
+// @title Weather API
+// @version 1.0.0
+// @description API to fetch weather data for a given city.
+// @BasePath /api
 func main() {
 	// read the application configuration
 	config.ReadConfig()

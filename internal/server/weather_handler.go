@@ -7,7 +7,15 @@ import (
 	"weather-api/internal/config"
 )
 
-// GetWeatherDetails fetches weather data for a given city.
+// @Summary Get weather details
+// @ID GetWeatherDetails
+// @tags Weather
+// @Param city query string true "City name"
+// @Success 200 {object} dto.OpenWeatherMapResponse
+// @Produce json
+// @Failure 400 "missing city query parameter"
+// @Failure 500 "internal server error"
+// @Router /weather [GET]
 func (s *Server) GetWeatherDetails(w http.ResponseWriter, r *http.Request) {
 	city := r.URL.Query().Get("city")
 

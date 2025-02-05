@@ -1,0 +1,143 @@
+basePath: /api
+definitions:
+  dto.Clouds:
+    properties:
+      all:
+        type: integer
+    type: object
+  dto.Coord:
+    properties:
+      lat:
+        type: number
+      lon:
+        type: number
+    type: object
+  dto.Main:
+    properties:
+      feels_like:
+        type: number
+      grnd_level:
+        type: integer
+      humidity:
+        type: integer
+      pressure:
+        type: integer
+      sea_level:
+        type: integer
+      temp:
+        type: number
+      temp_max:
+        type: number
+      temp_min:
+        type: number
+    type: object
+  dto.OpenWeatherMapResponse:
+    properties:
+      base:
+        type: string
+      clouds:
+        $ref: '#/definitions/dto.Clouds'
+      cod:
+        type: integer
+      coord:
+        $ref: '#/definitions/dto.Coord'
+      dt:
+        type: integer
+      id:
+        type: integer
+      main:
+        $ref: '#/definitions/dto.Main'
+      name:
+        type: string
+      rain:
+        $ref: '#/definitions/dto.Rain'
+      snow:
+        $ref: '#/definitions/dto.Snow'
+      sys:
+        $ref: '#/definitions/dto.Sys'
+      timezone:
+        type: integer
+      visibility:
+        type: integer
+      weather:
+        items:
+          $ref: '#/definitions/dto.Weather'
+        type: array
+      wind:
+        $ref: '#/definitions/dto.Wind'
+    type: object
+  dto.Rain:
+    properties:
+      1h:
+        type: number
+    type: object
+  dto.Snow:
+    properties:
+      1h:
+        type: number
+    type: object
+  dto.Sys:
+    properties:
+      country:
+        type: string
+      id:
+        type: integer
+      message:
+        type: number
+      sunrise:
+        type: integer
+      sunset:
+        type: integer
+      type:
+        type: integer
+    type: object
+  dto.Weather:
+    properties:
+      description:
+        type: string
+      icon:
+        type: string
+      id:
+        type: integer
+      main:
+        type: string
+    type: object
+  dto.Wind:
+    properties:
+      deg:
+        type: integer
+      gust:
+        type: number
+      speed:
+        type: number
+    type: object
+info:
+  contact: {}
+  description: API to fetch weather data for a given city.
+  title: Weather API
+  version: 1.0.0
+paths:
+  /weather:
+    get:
+      operationId: GetWeatherDetails
+      parameters:
+      - description: City name
+        in: query
+        name: city
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.OpenWeatherMapResponse'
+        "400":
+          description: missing city query parameter
+        "500":
+          description: internal server error
+      summary: Get weather details
+      tags:
+      - Weather
+swagger: "2.0"

@@ -12,6 +12,7 @@ import (
 	"weather-api/internal/domain"
 
 	"github.com/go-chi/chi"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 
 // Server wrapper of the http Server and also manages handlers which dispatches the requests to the appropriate routes.
@@ -48,6 +49,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	router.Get("/", http.HandlerFunc(s.HomePage))
 	// Serve static assets
 	router.Mount("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("web/assets"))))
+	router.Get("/api/docs/*", httpSwagger.WrapHandler)
 	router.Get("/api/weather", http.HandlerFunc(s.GetWeatherDetails))
 
 	return router
