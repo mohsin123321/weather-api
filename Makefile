@@ -1,3 +1,4 @@
+.PHONY: docs
 printf = @printf "%s\t\t%s\n"
 
 .DEFAULT_GOAL := run
@@ -10,6 +11,7 @@ help:
 	$(printf) "lint" "run the linter golangci-lint"
 	$(printf) "prepare_test" "prepare mocks for the tests"
 	$(printf) "test" "prepare tests and run the tests"
+	$(printf) "docs" "generate the swagger documentation"
 
 	@echo -e "\n'run' will be executed by default if you do not specify a command."
 
@@ -28,6 +30,8 @@ lint:
 prepare_test: 
 	go generate tests/mocks_generator.go
 
-test:
-	prepare_test
+test: prepare_test
 	go test -v ./...
+
+docs: 
+	swag init --dir cmd/api,internal/server,internal/dto
