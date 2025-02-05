@@ -7,7 +7,7 @@ import (
 // ErrServerError is raised when server breaks for internal reasons.
 func ErrServerError() *AppError {
 	return &AppError{
-		msg:    "Internal Server Error",
+		msg:    "internal server error",
 		status: http.StatusInternalServerError,
 	}
 }

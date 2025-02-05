@@ -4,7 +4,6 @@ import (
 	"sync"
 	"time"
 	"weather-api/internal/apperrors"
-	"weather-api/internal/config"
 	"weather-api/internal/dto"
 )
 
@@ -40,26 +39,27 @@ func (c *CacheMap) Get(city string) (dto.OpenWeatherMapResponse, bool, error) {
 	}
 
 	if time.Now().After(entry.expiresAt) {
-		c.data.Delete(city)
 		return dto.OpenWeatherMapResponse{}, false, nil
 	}
 
 	return entry.weather, true, nil
 }
 
-// Set stores weather data in the cache with a 5-minute expiration
-func (c *CacheMap) Set(city string, weather dto.OpenWeatherMapResponse) {
-	// cacheExpiry in minutes loaded from the config
-	cacheExpiry := config.GetConfig().CacheExpiry
+// Set stores weather data in the cache with a given expiry time
+func (c *CacheMap) Set(city string, weather dto.OpenWeatherMapResponse, cacheExpiry int) {
 	c.data.Store(city, cacheEntry{
 		weather:   weather,
 		expiresAt: time.Now().Add(time.Duration(cacheExpiry) * time.Minute),
 	})
 }
 
+// Delete removes weather data from the cache
+func (c *CacheMap) Delete(city string) {
+	c.data.Delete(city)
+}
+
 // CleanUp periodically removes expired entries from the cache after every minute
-func (c *CacheMap) CleanUp() {
-	ticker := time.NewTicker(1 * time.Minute)
+func (c *CacheMap) CleanUp(ticker *time.Ticker) {
 	defer ticker.Stop()
 
 	for range ticker.C {

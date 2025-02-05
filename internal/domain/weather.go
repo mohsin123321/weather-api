@@ -10,5 +10,6 @@ type OpenWeatherMapAdapter interface {
 // CacheMap is an interface for caching weather data
 type CacheMap interface {
 	Get(city string) (dto.OpenWeatherMapResponse, bool, error)
-	Set(city string, weather dto.OpenWeatherMapResponse)
+	Set(city string, weather dto.OpenWeatherMapResponse, cacheExpiry int)
+	Delete(city string)
 }

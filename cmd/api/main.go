@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"time"
 	"weather-api/internal/adapters"
 	"weather-api/internal/persistence"
 	"weather-api/internal/server"
@@ -19,10 +20,12 @@ func main() {
 
 	// start the cache cleanup routine in the background
 	go func() {
+		ticker := time.NewTicker(1 * time.Minute)
 		// recover from a panic in the cache cleanup routine
 		// prevents the panic from crashing the application
 		defer server.RecoverFromPanic("recovered from panic in cache cleanup routine: %v")
-		cache.CleanUp()
+		// run the cleanup routine after every minute
+		cache.CleanUp(ticker)
 	}()
 
 	s := server.NewServer(cfg.Port, cache, adapters.NewOpenWeatherMapAdapter())
