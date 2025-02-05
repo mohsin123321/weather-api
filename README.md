@@ -27,3 +27,18 @@ To start the server, run the following command:
 
 ```bash
 go run ./cmd/api/main.go
+```
+
+## Running Tests
+
+To run the tests, ensure that you have `mockgen` installed from `go.uber.org/mock`. You can install it using:
+
+```bash
+go install go.uber.org/mock/mockgen@latest
+```
+
+Once installed, you can run the tests using:
+
+```bash
+make test
+```
