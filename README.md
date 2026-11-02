@@ -7,7 +7,7 @@ A weather application that fetches real-time weather data for any city using the
 | Layer | Technology |
 |---|---|
 | Backend | Go 1.22, Chi router, in-memory cache |
-| Frontend | React 18, TypeScript, Vite |
+| Frontend | React 19, TypeScript, Vite |
 | Containerisation | Docker, Docker Compose |
 | API | OpenWeatherMap |
 
