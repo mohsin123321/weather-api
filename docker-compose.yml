@@ -1,6 +1,8 @@
 services:
   api:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.api
     ports:
       - "8080:8080"
     environment:
@@ -9,6 +11,17 @@ services:
       OPEN_WEATHER_MAP_BASE_URL: "https://api.openweathermap.org/data/2.5"
     env_file:
       - .env
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      BACKEND_URL: "http://api:8080"
+    depends_on:
+      - api
 
   # redis:   # uncomment in Step 5
   #   image: redis:7-alpine

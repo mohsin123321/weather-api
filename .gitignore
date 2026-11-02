@@ -13,3 +13,6 @@ web/dist/
 
 # Binaries
 bin/
+
+# Claude Code
+.claude/
