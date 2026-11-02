@@ -1,19 +1,30 @@
-.PHONY: docs
+.PHONY: docs up down logs build run semgrep lint prepare_test test
 printf = @printf "%s\t\t%s\n"
 
-.DEFAULT_GOAL := run
+.DEFAULT_GOAL := help
 
 help:
 	@echo -e "Commands available:\n"
-	$(printf) "run" "execute the app"
-	$(printf) "build" "build the app in an executable file"
-	$(printf) "semgrep" "run semgrep to check for vulnerabilities"
-	$(printf) "lint" "run the linter golangci-lint"
-	$(printf) "prepare_test" "prepare mocks for the tests"
-	$(printf) "test" "prepare tests and run the tests"
-	$(printf) "docs" "generate the swagger documentation"
+	$(printf) "up" "start all services (api + web) via docker compose"
+	$(printf) "down" "stop and remove all services"
+	$(printf) "logs" "tail logs from all running services"
+	$(printf) "run" "run the Go API locally (no docker)"
+	$(printf) "build" "build the Go binary"
+	$(printf) "semgrep" "run semgrep vulnerability scan"
+	$(printf) "lint" "run golangci-lint"
+	$(printf) "prepare_test" "generate mocks for tests"
+	$(printf) "test" "run all tests"
+	$(printf) "docs" "regenerate swagger docs"
+	@echo -e "\n'help' is shown by default if you do not specify a command."
 
-	@echo -e "\n'run' will be executed by default if you do not specify a command."
+up:
+	docker compose up --build -d
+
+down:
+	docker compose down
+
+logs:
+	docker compose logs -f
 
 run:
 	go run ./cmd/api/main.go
@@ -27,11 +38,11 @@ semgrep:
 lint:
 	golangci-lint run -v --timeout 5m
 
-prepare_test: 
+prepare_test:
 	go generate tests/mocks_generator.go
 
 test: prepare_test
 	go test -v ./...
 
-docs: 
+docs:
 	swag init --dir cmd/api,internal/server,internal/dto
