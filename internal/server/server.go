@@ -6,9 +6,7 @@ import (
 	"net/http"
 	"os/signal"
 	"syscall"
-	"text/template"
 	"time"
-	"weather-api/internal/apperrors"
 	"weather-api/internal/domain"
 
 	"github.com/go-chi/chi"
@@ -46,11 +44,12 @@ func (s *Server) RegisterRoutes() http.Handler {
 	router := chi.NewRouter()
 	applyCommonMiddlewares(router)
 
-	router.Get("/", http.HandlerFunc(s.HomePage))
-	// Serve static assets
-	router.Mount("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("web/assets"))))
 	router.Get("/api/docs/*", httpSwagger.WrapHandler)
 	router.Get("/api/weather", http.HandlerFunc(s.GetWeatherDetails))
+
+	// Serve React build; fall back to index.html for client-side routing.
+	fs := http.FileServer(http.Dir("web/dist"))
+	router.Handle("/*", fs)
 
 	return router
 }
@@ -84,17 +83,3 @@ func (s *Server) GracefulShutDown(done chan bool) {
 	done <- true
 }
 
-// HomePage serves the home page by rendering an HTML template at the root path.
-func (s *Server) HomePage(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("web/templates/index.gohtml")
-	if err != nil {
-		WriteErrorResponse(w, apperrors.ErrServerError())
-		return
-	}
-
-	err = tmpl.Execute(w, nil)
-	if err != nil {
-		WriteErrorResponse(w, apperrors.ErrServerError())
-		return
-	}
-}
