@@ -1,0 +1,16 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: "8080"
+      CACHE_EXPIRY: "5"
+      OPEN_WEATHER_MAP_BASE_URL: "https://api.openweathermap.org/data/2.5"
+    env_file:
+      - .env
+
+  # redis:   # uncomment in Step 5
+  #   image: redis:7-alpine
+  #   ports:
+  #     - "6379:6379"

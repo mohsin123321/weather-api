@@ -6,3 +6,10 @@
 
 # Ignore mocks
 mocks
+
+# Frontend
+web/node_modules/
+web/dist/
+
+# Binaries
+bin/
