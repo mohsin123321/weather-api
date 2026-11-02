@@ -1,44 +1,96 @@
 # Weather App
 
-A simple weather application that fetches real-time weather data based on the user's selected city using the OpenWeatherMap API. The weather details are displayed in a user-friendly, well-structured card format.
+A weather application that fetches real-time weather data for any city using the OpenWeatherMap API. Built with a Go backend and a React + TypeScript frontend.
 
-## Technologies
+## Tech Stack
 
-- **Golang 1.22.2**
-- **OpenMapWeatherApi**
-- **HTML, CSS, and JavaScript**
+| Layer | Technology |
+|---|---|
+| Backend | Go 1.22, Chi router, in-memory cache |
+| Frontend | React 18, TypeScript, Vite |
+| Containerisation | Docker, Docker Compose |
+| API | OpenWeatherMap |
 
-## Configuration
+## Prerequisites
 
-This application requires certain environment variables to be set. These values can be provided via a `.env` file that should be present at the root directory or set manually in the system environment, otherwise default value will be assigned to them except `WEATHER_API_KEY`.
+- [Docker](https://docs.docker.com/get-docker/) and Docker Compose
+- An [OpenWeatherMap API key](https://openweathermap.org/api) (free tier is enough)
 
-### **Environment Variables**
+## Getting Started
 
-| Variable Name               | Description                                | Default Value |
-|-----------------------------|--------------------------------------------|--------------|
-| `PORT`                      | The port on which the server runs          | `8080`       |
-| `WEATHER_API_KEY`           | OpenWeatherMap API key (required)          | _empty_      |
-| `CACHE_EXPIRY`              | Cache expiry time in minutes               | `5`          |
-| `OPEN_WEATHER_MAP_BASE_URL` | Base URL for OpenWeatherMap API requests   | `https://api.openweathermap.org/data/2.5` |
-
-## Start the Server
-
-To start the server, run the following command:
+**1. Copy the environment file and add your API key:**
 
 ```bash
-go run ./cmd/api/main.go
+cp .env.example .env
+# then edit .env and set WEATHER_API_KEY=your_key_here
 ```
+
+**2. Start all services:**
+
+```bash
+make up
+```
+
+This builds and starts the Go API (`localhost:8080`) and the React dev server (`localhost:5173`) in the background. Open `http://localhost:5173` in your browser.
+
+**3. Stop all services:**
+
+```bash
+make down
+```
+
+**4. Tail live logs:**
+
+```bash
+make logs
+```
+
+## Environment Variables
+
+| Variable | Description | Default |
+|---|---|---|
+| `WEATHER_API_KEY` | OpenWeatherMap API key (required) | — |
+| `PORT` | Port the Go API listens on | `8080` |
+| `CACHE_EXPIRY` | Cache TTL in minutes | `5` |
+| `OPEN_WEATHER_MAP_BASE_URL` | OpenWeatherMap base URL | `https://api.openweathermap.org/data/2.5` |
+
+## Running Locally (without Docker)
+
+```bash
+# Terminal 1 — Go API
+go run ./cmd/api/main.go
+
+# Terminal 2 — React dev server (hot reload)
+cd web && npm run dev
+```
+
+## All Make Commands
+
+| Command | Description |
+|---|---|
+| `make up` | Build and start all services via Docker Compose |
+| `make down` | Stop and remove all containers |
+| `make logs` | Follow live logs from all services |
+| `make run` | Run the Go API locally (no Docker) |
+| `make build` | Compile the Go binary to `bin/api` |
+| `make test` | Generate mocks and run all tests |
+| `make lint` | Run golangci-lint |
+| `make docs` | Regenerate Swagger docs |
 
 ## Running Tests
 
-To run the tests, ensure that you have `mockgen` installed from `go.uber.org/mock`. You can install it using:
+Install `mockgen` once:
 
 ```bash
 go install go.uber.org/mock/mockgen@latest
 ```
 
-Once installed, you can run the tests using:
+Then:
 
 ```bash
 make test
 ```
+
+## Build Plan
+
+See [PLAN.md](PLAN.md) for the full roadmap.
